@@ -184,9 +184,6 @@ def chat():
         # Get access token to potentially pass to MCP server
         access_token = request.headers.get(JWT_HEADER_NAME)
 
-        chattie.rev_engines()
-
-
         # Fetch user-specific tools from MCP server (with session caching)
         # These are obviously user-specific, so keep them in the session
         if 'user_tools' not in session:
@@ -219,11 +216,11 @@ def chat():
         
         
         # Add assistant response to conversation history
-        session['conversation_history'].append(updated_messages)
+        session['conversation_history'].extend(updated_messages)
         session.modified = True  # Mark session as modified to ensure it's saved
         
         return jsonify({
-            'response': updated_messages[-1]
+            'response': updated_messages[-1]['content']
         })
         
     except Exception as e:

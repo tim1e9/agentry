@@ -23,12 +23,7 @@ class ChatService:
     self.mcp_client = MCPClient(os.getenv('MCP_SERVER_URL'))
     # OpenAI model selection
     self.OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-    # Initialize MCP connection and get available tools
-
-  def rev_engines(self):
     self.mcp_tools = []
-    init_result = self.mcp_client.initialize()
-    logger.info(f"MCP Tooling initialized: {str(init_result)}")
 
   def trim_conversation_history(self, history, max_messages=MAX_CONVERSATION_MESSAGES):
     """
@@ -65,8 +60,6 @@ class ChatService:
     """
     return INITIAL_PROMPT
   
-
-
   def chat(self, employee_id, user_tools, messages, access_token):
     # Convert MCP tools to OpenAI function format
     openai_tools = []
@@ -92,8 +85,22 @@ class ChatService:
 
     # Check if the model wants to call a tool
     if assistant_message.tool_calls:
-        # Process tool calls
-        messages.append(assistant_message)
+        # Process tool calls - convert to dict for JSON serialization
+        messages.append({
+            "role": assistant_message.role,
+            "content": assistant_message.content,
+            "tool_calls": [
+                {
+                    "id": tc.id,
+                    "type": tc.type,
+                    "function": {
+                        "name": tc.function.name,
+                        "arguments": tc.function.arguments
+                    }
+                }
+                for tc in assistant_message.tool_calls
+            ]
+        })
 
         for tool_call in assistant_message.tool_calls:
             function_name = tool_call.function.name

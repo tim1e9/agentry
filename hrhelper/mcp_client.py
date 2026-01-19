@@ -20,34 +20,34 @@ class MCPClient:
         self.tools = []
         self.session_id = None
         
-    async def _initialize_async(self):
-        """Initialize the MCP session asynchronously."""
-        async with streamable_http_client(self.base_url) as (read, write, get_session_id):
-            async with ClientSession(read, write) as session:
-                init_result = await session.initialize()
-                logger.debug("MCP initialize result: %s", init_result)
+    # async def _initialize_async(self):
+    #     """Initialize the MCP session asynchronously."""
+    #     async with streamable_http_client(self.base_url) as (read, write, get_session_id):
+    #         async with ClientSession(read, write) as session:
+    #             init_result = await session.initialize()
+    #             logger.debug("MCP initialize result: %s", init_result)
                 
-                # List available tools
-                tools_result = await session.list_tools()
-                logger.debug("MCP tools result: %s", tools_result)
-                logger.info("MCP tools discovered: %d", len(tools_result.tools))
-                self.tools = tools_result.tools
+    #             # List available tools
+    #             tools_result = await session.list_tools()
+    #             logger.debug("MCP tools result: %s", tools_result)
+    #             logger.info("MCP tools discovered: %d", len(tools_result.tools))
+    #             self.tools = tools_result.tools
                 
-                return session
+    #             return session
     
-    def initialize(self) -> Dict[str, Any]:
-        """Initialize connection with MCP server (sync wrapper)."""
-        try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(self._initialize_async())
-            logger.info("MCP client initialized; cached tools=%d", len(self.tools))
-            return {"status": "initialized", "tools": len(self.tools)}
-        except Exception as e:
-            logger.exception("Error initializing MCP client")
-            return {}
-        finally:
-            loop.close()
+    # def initialize(self) -> Dict[str, Any]:
+    #     """Initialize connection with MCP server (sync wrapper)."""
+    #     try:
+    #         loop = asyncio.new_event_loop()
+    #         asyncio.set_event_loop(loop)
+    #         loop.run_until_complete(self._initialize_async())
+    #         logger.info("MCP client initialized; cached tools=%d", len(self.tools))
+    #         return {"status": "initialized", "tools": len(self.tools)}
+    #     except Exception as e:
+    #         logger.exception("Error initializing MCP client")
+    #         return {}
+    #     finally:
+    #         loop.close()
     
     async def _list_tools_async(self, access_token: str = None) -> List[Dict[str, Any]]:
         """List tools asynchronously with optional authentication."""
