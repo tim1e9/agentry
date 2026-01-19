@@ -78,14 +78,14 @@ should work as well.
 ## Technology Stack
 
 ### Backend
-- **Python 3.8+**
+- **Python 3.10+**
 - **Flask** - Web framework for HR Helper
 - **Flask** - Web framework for Vacay REST API
 - **FastMCP** - MCP server implementation for Vacay
 - **PostgreSQL** - Database for vacation data
 - **psycopg2** - PostgreSQL adapter
 - **fit-jwt-py** - OAuth/OIDC authentication library
-- **OpenAI Chat Completions** - Language model for chatbot (default: `gpt-4o-mini`)
+- **OpenAI Chat Completions** - Language model for chatbot (default: `gpt-5.2`)
 
 ### Frontend
 - **Vanilla JavaScript** - Client-side logic
@@ -99,7 +99,7 @@ should work as well.
 
 ## Prerequisites
 
-- Python 3.8 or higher
+- Python 3.10 or higher
 - PostgreSQL 12 or higher
 - Keycloak or compatible OIDC provider
 - OpenAI API key
@@ -151,8 +151,6 @@ python flask_main.py
 
 ```
 
-**NOTE**: As of now, both back-end apps use the same port, so consider running them one at a time.
-
 
 ### 3. Set Up Vacay Frontend
 
@@ -165,14 +163,12 @@ cd ../frontend
 python3 -m http.server 3001
 ```
 
-**NOTE**: This uses port 3001, which should not conflict with HR Helper (HT Helper defaults to 3000).
+**NOTE**: This uses port 3001, which should not conflict with HR Helper (HR Helper defaults to 3000).
 If 3001 is already in use, pick another port.
 
 Navigate to http://localhost:3001 and start using the application.
 
 ### 4. Set Up HR Helper
-
-**Note:** Stop the prior UI, since they both use the same port.
 
 In the existing back-end terminal, stop the currently running app.
 Once stopped, start up the MCP backend:
@@ -234,73 +230,6 @@ Navigate back to http://localhost:3000
 - Excludes weekends (Saturday and Sunday)
 - Excludes corporate holidays
 - Calculated automatically for vacation requests
-
-## API Endpoints
-
-### Vacay REST API
-
-```
-GET    /employees/me               - Get current user profile
-PUT    /employees/me               - Update profile (hire_date)
-GET    /employees/me/balance       - Get vacation balance
-GET    /vacations                  - Get all vacation requests
-POST   /vacations                  - Create vacation request
-DELETE /vacations/:id              - Delete vacation request
-GET    /holidays                   - Get corporate holidays
-POST   /vacations/calculate-days   - Calculate business days
-POST   /login                      - OAuth login
-GET    /auth/callback              - OAuth callback
-GET    /logout                     - Logout
-```
-
-### MCP Tools (Vacay)
-
-```
-get_corporate_holidays(year)                          - Get holidays for a year
-get_my_profile()                                      - Get user profile
-update_my_profile(hire_date)                          - Update hire date
-get_my_balance(year)                                  - Get vacation balance
-get_my_vacations()                                    - Get all vacations
-create_vacation_entry(type, start, end, notes)        - Create vacation
-delete_vacation_entry(id)                             - Delete vacation
-calc_business_days(start_date, end_date)              - Calculate business days
-```
-
-### HR Helper API
-
-```
-GET  /                              - Serve chatbot UI
-POST /api/chat                      - Send chat message (authenticated)
-GET  /api/tools                     - Get available MCP tools
-POST /login                         - OAuth login
-GET  /auth/callback                 - OAuth callback
-POST /api/auth/refresh              - Refresh JWT token
-GET  /api/auth/me                   - Get current user
-POST /api/auth/logout               - Logout
-```
-
-## MCP Integration Details
-
-### Protocol
-- **Transport**: HTTP (StreamableHttp)
-- **Version**: 2024-11-05
-- **Authentication**: OAuth Bearer tokens passed through
-
-### Flow
-1. HR Helper initializes MCP client connection
-2. On user authentication, fetches user-specific tools from Vacay MCP server
-3. When user sends a chat message:
-   - OpenAI receives message + available MCP tools
-   - If tool call needed, HR Helper forwards to Vacay MCP server
-   - Vacay MCP server validates auth token and executes tool
-   - Result returned to OpenAI for natural language response
-   - Final response displayed to user
-
-### Security
-- All MCP tool calls require valid OAuth access token
-- Token validation performed by Vacay MCP server using fit-jwt-py
-- User context (employee_id) extracted from token claims
-- Authorization enforced at MCP server level
 
 
 ## License

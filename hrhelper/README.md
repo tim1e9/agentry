@@ -1,17 +1,18 @@
 # MCP Chatbot
 
-A minimalist chatbot that integrates with an MCP (Model Context Protocol) server to provide AI-powered assistance with calculator functionality (and future enterprise vacation/time-off queries).
+A minimalist chatbot that integrates with an MCP (Model Context Protocol) server to provide
+AI-powered assistance with calculator functionality (and future enterprise vacation/time-off queries).
 
 ## Features
 
-- 🤖 OpenAI GPT-4 integration for natural language understanding
+- 🤖 OpenAI GPT-5 integration for natural language understanding
 - 🔧 MCP over HTTP protocol support
 - 💬 Clean, modern chat interface (vanilla HTML/CSS/JS)
 - ⚡ Real-time tool calling and response
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - OpenAI API key
 - MCP server running on `http://localhost:8000`
 
@@ -57,12 +58,12 @@ Start the Flask server:
 python server.py
 ```
 
-The application will be available at `http://localhost:5000`
+The application will be available at `http://localhost:3000`
 
 ## Usage
 
-1. Open your browser and navigate to `http://localhost:5000`
-2. Type a message in the chat input (e.g., "What is 25 * 48?")
+1. Open your browser and navigate to `http://localhost:3000`
+2. Type a message in the chat input (e.g., "Hello, can you help me with my vacation scheduling?")
 3. Press Enter or click Send
 4. The bot will use the MCP server tools to calculate and respond
 
@@ -73,14 +74,14 @@ You can click "Show Available Tools" to see what tools are available from your M
 ```
 ┌─────────────┐      ┌──────────────┐      ┌────────────┐
 │   Browser   │─────▶│ Flask Server │─────▶│ OpenAI API │
-│(HTML/CSS/JS)│◀─────│  (server.py) │◀─────│   (GPT-4)  │
+│(HTML/CSS/JS)│◀─────│  (server.py) │◀─────│   (GPT-5)  │
 └─────────────┘      └──────┬───────┘      └────────────┘
                             │
                             ▼
-                     ┌──────────────┐
-                     │  MCP Client  │
+                     ┌───────────────┐
+                     │  MCP Client   │
                      │(mcp_client.py)│
-                     └──────┬───────┘
+                     └──────┬────────┘
                             │
                             ▼
                      ┌────────────────┐
@@ -89,14 +90,6 @@ You can click "Show Available Tools" to see what tools are available from your M
                      └────────────────┘
 ```
 
-### Key Components
-
-- **server.py**: Flask backend that handles chat requests, coordinates between OpenAI and MCP server
-- **mcp_client.py**: MCP over HTTP client implementation
-- **static/**: Frontend files (HTML, CSS, JavaScript)
-  - **index.html**: Main page structure
-  - **styles.css**: Styling with gradient theme
-  - **script.js**: Chat functionality and API communication
 
 ## MCP Protocol
 
