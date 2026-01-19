@@ -9,11 +9,18 @@ from datetime import date, datetime
 from flask import Flask, request, jsonify, redirect, make_response
 from flask.json.provider import DefaultJSONProvider
 from flask_cors import CORS
-import fitjwtpy
 
 # Import our service layers
 import db_service
 import vacation_service
+from authnz_service import (
+    build_login_response,
+    exchange_code_for_tokens_from_cookie,
+    get_logout_url,
+    get_user_from_auth_header,
+    init_authnz,
+    refresh_token,
+)
 
 load_dotenv()
 
@@ -50,35 +57,18 @@ CORS(app,
 # Initialize database on startup
 db_service.init_db()
 
-# Initialize fit-jwt-py with OAuth configuration
+# Initialize authn/authz service
 try:
-    fitjwtpy.init()
+    init_authnz()
 except Exception as e:
-    logger.warning("fit-jwt-py initialization failed", exc_info=True)
+    logger.warning("AuthNZ initialization failed", exc_info=True)
 
-# ==================== JWT AUTHENTICATION ====================
+# ==================== Authn/Authz Helper Methods ====================
 
 def get_current_user():
-    """Extract and validate user info from JWT token using fit-jwt-py"""
+    """Extract and validate user info from JWT token."""
     auth_header = request.headers.get("Authorization")
-    if not auth_header or not auth_header.startswith("Bearer "):
-        return None
-    
-    token = auth_header.split(" ")[1]
-    
-    # Use fit-jwt-py to validate and extract user info
-    user_info = fitjwtpy.get_user_from_token(token)
-    
-    if not user_info:
-        return None
-    
-    return {
-        'oidc_user_id': user_info.get('sub'),
-        'email': user_info.get('email'),
-        'first_name': user_info.get('given_name', ''),
-        'last_name': user_info.get('family_name', ''),
-        'username': user_info.get('preferred_username')
-    }
+    return get_user_from_auth_header(auth_header)
 
 
 def require_auth(f):
@@ -103,26 +93,8 @@ def root():
 @app.route("/login")
 def login():
     """Initiate OAuth login flow with PKCE"""
-    # Generate PKCE details with S256 method
-    pkce_details = fitjwtpy.get_pkce_details('S256')
-    
-    # Get authorization URL
-    auth_url = fitjwtpy.get_auth_url(pkce_details)
-        
-    # Store PKCE details in cookie
-    response = make_response(redirect(auth_url))
-    cookie_value = {
-        'codeVerifier': pkce_details.code_verifier,
-        'codeChallenge': pkce_details.code_challenge,
-        'method': pkce_details.method
-    }
-    response.set_cookie(
-        key=os.getenv('COOKIE_NAME', 'pkce_cookie'),
-        value=str(cookie_value),
-        httponly=True,
-        max_age=600
-    )
-    return response
+    cookie_name = os.getenv('COOKIE_NAME', 'pkce_cookie')
+    return build_login_response(cookie_name=cookie_name, max_age=600)
 
 @app.route("/auth/callback")
 def auth_callback():
@@ -138,12 +110,8 @@ def auth_callback():
     if not raw_cookie:
         return jsonify({'status': 'cookie missing'}), 400
     
-    # Parse cookie to get code verifier
-    import ast
-    pkce_details = ast.literal_eval(raw_cookie)
-    
-    # Exchange authorization code for tokens
-    jwt_components = fitjwtpy.get_jwt_token(code, pkce_details['codeVerifier'])
+    # Exchange authorization code for tokens (PKCE handled in auth service)
+    jwt_components = exchange_code_for_tokens_from_cookie(code, raw_cookie)
     
     # Redirect to frontend callback page with tokens
     frontend_base = os.getenv('FRONTEND_URL').split('/dashboard')[0]
@@ -163,7 +131,7 @@ def test_refresh():
         return jsonify({'error': 'Authorization header required'}), 400
     
     # Refresh the token
-    new_details = fitjwtpy.refresh_jwt_token(token)
+    new_details = refresh_token(token)
     
     return jsonify({
         'accessToken': new_details.access_token,
@@ -174,16 +142,9 @@ def test_refresh():
 @app.route("/logout")
 def logout():
     """Logout from SSO session"""
-    # Get OIDC logout URL
-    token_endpoint = os.getenv('TOKEN_ENDPOINT', '')
-    logout_endpoint = token_endpoint.replace('/token', '/logout')
-    
-    # Redirect to OIDC logout, then back to frontend
     frontend_base = os.getenv('FRONTEND_URL').split('/dashboard')[0]
     redirect_uri = f"{frontend_base}/"
-    
-    logout_url = f"{logout_endpoint}?redirect_uri={redirect_uri}"
-    
+    logout_url = get_logout_url(redirect_uri)
     return redirect(logout_url)
 
 # ==================== EMPLOYEE ENDPOINTS ====================
