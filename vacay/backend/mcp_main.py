@@ -13,10 +13,10 @@ from pydantic import AnyHttpUrl
 from mcp.server.fastmcp import FastMCP
 from mcp.server.auth.settings import AuthSettings
 from mcp.server.auth.middleware.auth_context import get_access_token
-from fitjwtpy import init as fitjwtpy_init, get_user_from_token
 
 import db_service
 import vacation_service
+from authnz_service import init_authnz, get_user_from_token
 from token_verifier import create_token_verifier_from_env
 
 # Load environment variables from .env file
@@ -39,9 +39,9 @@ auth_settings = None
 if all([os.getenv("JWKS_URL"), os.getenv("OAUTH_ISSUER"), os.getenv("OAUTH_AUDIENCE"), os.getenv("CLIENT_ID")]):
     try:
         
-        # Initialize fitjwtpy - this loads environment variables and fetches JWKS
-        fitjwtpy_init()
-        logger.info("fitjwtpy initialized successfully")
+        # Initialize authn/authz service - loads environment variables and fetches JWKS
+        init_authnz()
+        logger.info("AuthNZ initialized successfully")
         
         # Create token verifier from environment variables
         token_verifier = create_token_verifier_from_env()
@@ -79,18 +79,12 @@ def get_current_user_from_mcp():
     if not access_token:
         raise ValueError("Not authenticated")
     
-    # Use fit-jwt-py to extract user info from token
+    # Use authn/authz service to extract user info from token
     user_info = get_user_from_token(access_token.token)
     if not user_info:
         raise ValueError("Invalid or expired token")
     
-    return {
-        'oidc_user_id': user_info.get('sub'),
-        'email': user_info.get('email'),
-        'first_name': user_info.get('given_name', ''),
-        'last_name': user_info.get('family_name', ''),
-        'username': user_info.get('preferred_username')
-    }
+    return user_info
 
 
 # ==================== MCP TOOLS ====================
