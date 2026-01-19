@@ -44,3 +44,6 @@ The path forward requires thoughtful implementation: careful API design, robust 
 
 The question is no longer whether this will transform how we interact with enterprise systems, but how quickly organizations will adopt it—and who will gain the competitive advantage by moving first.
 
+### Additional Details
+
+For a more thorough walkthrough of the work I did, please see [this document](./WALKTHROUGH.md).
