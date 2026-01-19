@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login View -->
+        <div id="login-view" class="view">
+            <div class="login-container">
+                <h1>🏖️ Vacation Manager</h1>
+                <p>Manage your vacation days and optional holidays</p>
+                <button id="login-btn" class="primary-btn">Sign In with SSO</button>
+            </div>
+        </div>
+
+        <!-- Main App (shown after login) -->
+        <div id="main-app" class="view hidden">
+            <nav class="navbar">
+                <div class="nav-brand">🏖️ Vacation Manager</div>
+                <ul class="nav-menu">
+                    <li><a href="#dashboard" class="nav-link active" data-view="dashboard">Dashboard</a></li>
+                    <li><a href="#vacations" class="nav-link" data-view="vacations">My Vacations</a></li>
+                    <li><a href="#request" class="nav-link" data-view="request">Request Time Off</a></li>
+                    <li><a href="#holidays" class="nav-link" data-view="holidays">Corporate Holidays</a></li>
+                </ul>
+                <div class="nav-user">
+                    <span id="user-name">Loading...</span>
+                    <button id="logout-btn" class="text-btn">Logout</button>
+                </div>
+            </nav>
+
+            <main class="container">
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="content-view active">
+                    <h2>Dashboard</h2>
+                    
+                    <div class="balance-cards">
+                        <div class="balance-card">
+                            <div class="balance-icon">🏖️</div>
+                            <div class="balance-info">
+                                <div class="balance-label">Vacation Days</div>
+                                <div class="balance-value">
+                                    <span id="vacation-available">-</span> / <span id="vacation-accrued">-</span>
+                                </div>
+                                <div class="balance-detail">
+                                    <span id="vacation-used">-</span> used · <span id="vacation-carryover">-</span> carried over
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="balance-card">
+                            <div class="balance-icon">✨</div>
+                            <div class="balance-info">
+                                <div class="balance-label">Optional Holidays</div>
+                                <div class="balance-value">
+                                    <span id="holidays-available">-</span> / 3
+                                </div>
+                                <div class="balance-detail">
+                                    <span id="holidays-used">-</span> used
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Upcoming Time Off</h3>
+                        <div id="upcoming-vacations" class="vacation-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Vacations View -->
+                <div id="vacations-view" class="content-view">
+                    <h2>My Vacations</h2>
+                    <div id="all-vacations" class="vacation-list">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Request Time Off View -->
+                <div id="request-view" class="content-view">
+                    <h2>Request Time Off</h2>
+                    
+                    <form id="vacation-form" class="form-card">
+                        <div class="form-group">
+                            <label for="vacation-type">Type</label>
+                            <select id="vacation-type" required>
+                                <option value="vacation">Vacation Day</option>
+                                <option value="optional_holiday">Optional Holiday</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="start-date">Start Date</label>
+                                <input type="date" id="start-date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="end-date">End Date</label>
+                                <input type="date" id="end-date" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="business-days-calc">
+                                <span class="calc-label">Business Days:</span>
+                                <span id="calculated-days" class="calc-value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Notes (optional)</label>
+                            <textarea id="notes" rows="3" placeholder="Add any notes about this time off..."></textarea>
+                        </div>
+
+                        <div id="form-error" class="error-message hidden"></div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn" id="submit-btn">Submit Request</button>
+                            <button type="button" class="secondary-btn" id="cancel-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Corporate Holidays View -->
+                <div id="holidays-view" class="content-view">
+                    <div class="holidays-header">
+                        <h2>Corporate Holidays</h2>
+                        <div class="holidays-controls">
+                            <label for="holidays-year" class="sr-only">Year</label>
+                            <select id="holidays-year" class="holidays-year-select"></select>
+                            <button id="holidays-refresh" type="button" class="secondary-btn">Refresh</button>
+                        </div>
+                    </div>
+
+                    <div id="corporate-holidays" class="holiday-list">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# If using a private PiPy server, copy this file to `pip.conf`, update the index-url value.
+# Also, set the env var PIP_CONFIG_FILE to point to it.
+[global]
+index-url = http://noobnoob.local:8888/simple/
+extra-index-url = https://pypi.org/simple/
+trusted-host = noobnoob.local

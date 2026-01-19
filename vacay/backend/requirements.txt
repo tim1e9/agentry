@@ -1,0 +1,7 @@
+flask
+flask-cors
+mcp>=1.2.0
+psycopg2-binary
+python-dotenv
+fit-jwt-py --index-url http://noobnoob.local:8888/simple
+--trusted-host noobnoob.local

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Helper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>🏢 HR Helper</h1>
+                    <p class="subtitle">Your Personal HR Assistant</p>
+                </div>
+                <div class="header-actions">
+                    <div id="userProfile" class="user-profile hidden">
+                        <span id="userName" class="user-name"></span>
+                        <button id="logoutButton" class="btn-secondary">Logout</button>
+                    </div>
+                    <div id="loginSection" class="login-section">
+                        <button id="loginButton" class="btn-primary">Login</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="chat-container">
+            <div id="messages" class="messages"></div>
+            
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Ask about vacation days, time off, or HR policies..."
+                    autocomplete="off"
+                >
+                <button id="sendButton">Send</button>
+            </div>
+        </div>
+        
+        <div class="tools-info">
+            <button id="toggleTools" class="tools-toggle">Show Available Tools</button>
+            <div id="toolsList" class="tools-list hidden"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

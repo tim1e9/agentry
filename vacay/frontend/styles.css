@@ -1,0 +1,563 @@
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Layout */
+.view {
+    display: none;
+}
+
+.view.active, .view:not(.hidden) {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Login View */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.login-container h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.login-container p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Navigation */
+.navbar {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-user span {
+    color: var(--text-secondary);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.content-view {
+    display: none;
+}
+
+.content-view.active {
+    display: block;
+}
+
+/* Buttons */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.primary-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+}
+
+.primary-btn:disabled {
+    background: var(--secondary-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.secondary-btn {
+    background: var(--bg-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.secondary-btn:hover {
+    background: var(--card-bg);
+}
+
+.text-btn {
+    background: none;
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+}
+
+.text-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-color);
+}
+
+.danger-btn {
+    background: var(--error-color);
+    color: white;
+}
+
+.danger-btn:hover {
+    background: #dc2626;
+}
+
+/* Balance Cards */
+.balance-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.balance-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    gap: 1rem;
+}
+
+.balance-icon {
+    font-size: 3rem;
+}
+
+.balance-info {
+    flex: 1;
+}
+
+.balance-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.balance-value {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.balance-detail {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Section */
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Vacation List */
+.vacation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.vacation-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--primary-color);
+}
+
+.vacation-card.optional-holiday {
+    border-left-color: var(--warning-color);
+}
+
+.vacation-card.past {
+    opacity: 0.6;
+    border-left-color: var(--secondary-color);
+}
+
+.vacation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.75rem;
+}
+
+.vacation-type {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.vacation-type-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+}
+
+.vacation-type-badge.optional-holiday {
+    background: var(--warning-color);
+}
+
+.vacation-dates {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.vacation-days {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.vacation-notes {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+.vacation-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.vacation-actions button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Form */
+.form-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.business-days-calc {
+    background: var(--bg-color);
+    padding: 1rem;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calc-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* Corporate Holidays */
+.holidays-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.holidays-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.holidays-year-select {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.holiday-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.holiday-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--secondary-color);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.holiday-name {
+    font-weight: 600;
+}
+
+.holiday-date {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.calc-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Messages */
+.error-message {
+    background: #fee;
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--error-color);
+}
+
+.loading {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 3rem 2rem;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    background: var(--card-bg);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 300px;
+    border-left: 4px solid var(--primary-color);
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.success {
+    border-left-color: var(--success-color);
+}
+
+.toast.error {
+    border-left-color: var(--error-color);
+}
+
+.toast.warning {
+    border-left-color: var(--warning-color);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-menu {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .balance-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .vacation-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    #toast-container {
+        left: 1rem;
+        right: 1rem;
+    }
+
+    .toast {
+        min-width: auto;
+    }
+}
